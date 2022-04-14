@@ -131,6 +131,7 @@ class _LeavesScreenState extends State<LeavesScreen> {
       },
     );
     provider = await json.decode(res.body);
+    provider.sort((a, b) => a['sent_date'].compareTo(b['sent_date']));
     print(provider);
     // _refresh();
   }
