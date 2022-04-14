@@ -17,10 +17,11 @@ class _RequsetScreenState extends State<RequsetScreen> {
         automaticallyImplyLeading: false, // Used for removing back buttoon.
         title: const Text("Request"),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
+      body: SingleChildScrollView(
+        //height: MediaQuery.of(context).size.height * .9,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               height: MediaQuery.of(context).size.height * 0.1,
