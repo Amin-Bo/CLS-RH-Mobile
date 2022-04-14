@@ -44,6 +44,9 @@ dependencies:
   file_picker: ^4.5.1
   dropdown_formfield: ^0.1.4
   flutter_local_notifications: ^9.4.0
+  syncfusion_flutter_pdfviewer: ^20.1.48-beta.1
+  flutter_cached_pdfview: ^0.4.1
+  flutter_plugin_pdf_viewer: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
