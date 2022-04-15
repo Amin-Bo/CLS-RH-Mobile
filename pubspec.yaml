@@ -50,7 +50,7 @@ dependencies:
   permission_handler: ^9.2.0
   dio: 4.0.0
   provider:
-  path_provider:
+  path_provider: 
   flutter_downloader: ^1.7.3
   pdf: ^3.7.4
 dev_dependencies:

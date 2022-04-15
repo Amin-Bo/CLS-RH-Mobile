@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -50,7 +50,18 @@ class _DownloadingDialogState extends State<DownloadingDialog> {
     final String dirPath = extDir!.path.toString();
     await Directory(dirPath).create(recursive: true);
     final String filePath = '$dirPath/';
-    return "$filePath/$filename";
+    final output = await getExternalStorageDirectory();
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+    RegExp pathToDownloads = new RegExp(r'.+0\/');
+
+    final downloadPath =
+        '${pathToDownloads.stringMatch(output!.path).toString()}Download';
+    final file = File('$downloadPath/$filename');
+    print(downloadPath);
+    return "$downloadPath/$filename";
   }
 
   @override
