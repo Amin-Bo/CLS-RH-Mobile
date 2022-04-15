@@ -150,8 +150,7 @@ class _LeavesScreenState extends State<LeavesScreen> {
 
   @override
   void initState() {
-    var androidInitialize =
-        new AndroidInitializationSettings("@mipmap/ic_launcher");
+    var androidInitialize = new AndroidInitializationSettings("app_icon");
     var initialzation = new InitializationSettings(android: androidInitialize);
     localNotification = new FlutterLocalNotificationsPlugin();
     localNotification.initialize(initialzation);

@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-import 'dart:async';
 
 import 'package:cls_rh/constants.dart';
 import 'package:cls_rh/screens/components/pdf_viewer.dart';
@@ -7,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
-class RequestList extends StatefulWidget {
-  const RequestList({Key? key}) : super(key: key);
+class RequestListInternship extends StatefulWidget {
+  const RequestListInternship({Key? key}) : super(key: key);
 
   @override
-  State<RequestList> createState() => _RequestListState();
+  State<RequestListInternship> createState() => _RequestListInternshipState();
 }
 
 var refreshKeyy = GlobalKey<RefreshIndicatorState>();
@@ -22,13 +22,12 @@ Color? done = Colors.green;
 Color? declined = Colors.red;
 var requests = [];
 
-class _RequestListState extends State<RequestList> {
-  Future getRequests() async {
+class _RequestListInternshipState extends State<RequestListInternship> {
+  void getRequests() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? from = sharedPreferences.get('_id').toString();
     String? token = sharedPreferences.get('token').toString();
-    Uri url = Uri.parse(cls_URL + "api/employee/getRequest/work");
-    Uri urlIntern = Uri.parse(cls_URL + "api/employee/getRequest/internship");
+    Uri url = Uri.parse(cls_URL + "api/employee/getRequest/internship");
     Map<String, String> headers = {
       "Content-type": "application/json",
       "Authorization": "jwt " + token
@@ -37,18 +36,11 @@ class _RequestListState extends State<RequestList> {
       url,
       headers: headers,
     );
-    var resIntern = await http.get(
-      urlIntern,
-      headers: headers,
-    );
     print(res.statusCode);
     var jsonData = await json.decode(res.body);
-    var jsonDataIntern = await json.decode(resIntern.body);
-    var requestsIntern = await jsonDataIntern['request'];
     requests = jsonData['request'];
-    requests.addAll(requestsIntern);
-    requests.sort((a, b) => DateTime.parse(b['sent_date'])
-        .compareTo(DateTime.parse(a['sent_date']))
+    requests.sort((a, b) => DateTime.parse(a['sent_date'])
+        .compareTo(DateTime.parse(b['sent_date']))
         .toInt());
     print(requests);
     //requests = await jsonData.request;
@@ -88,11 +80,9 @@ class _RequestListState extends State<RequestList> {
 
   @override
   void initState() {
+    getRequests();
     // TODO: implement initState
     super.initState();
-    setState(() {
-      _refresh();
-    });
   }
 
   @override

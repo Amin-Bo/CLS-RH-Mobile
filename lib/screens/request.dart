@@ -12,16 +12,15 @@ class RequsetScreen extends StatefulWidget {
 }
 
 class _RequsetScreenState extends State<RequsetScreen> {
+  var screen = true;
   FlutterLocalNotificationsPlugin localNotification =
       FlutterLocalNotificationsPlugin();
   @override
   void initState() {
-    var androidInitialize =
-        new AndroidInitializationSettings("@mipmap/ic_launcher");
+    var androidInitialize = new AndroidInitializationSettings("app_icon");
     var initialzation = new InitializationSettings(android: androidInitialize);
     localNotification = new FlutterLocalNotificationsPlugin();
     localNotification.initialize(initialzation);
-    print("hello there");
     super.initState();
   }
 
