@@ -16,7 +16,7 @@ class RequestList extends StatefulWidget {
   State<RequestList> createState() => _RequestListState();
 }
 
-var refreshKey = GlobalKey<RefreshIndicatorState>();
+var refreshKeyy = GlobalKey<RefreshIndicatorState>();
 Color? in_progress = Colors.orange;
 Color? done = Colors.green;
 Color? declined = Colors.red;
@@ -71,7 +71,7 @@ class _RequestListState extends State<RequestList> {
   }
 
   Future<void> _refresh() async {
-    refreshKey.currentState?.show(atTop: false);
+    refreshKeyy.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 1));
     setState(() {
       getRequests();
@@ -124,6 +124,7 @@ class _RequestListState extends State<RequestList> {
                               pdf: cls_URL +
                                   'assets/certifications/' +
                                   requests[index]["file"],
+                              fileName: requests[index]["_id"],
                             ),
                           ),
                         );
@@ -162,7 +163,7 @@ class _RequestListState extends State<RequestList> {
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       displacement: 50,
       onRefresh: _refresh,
-      key: refreshKey,
+      //key: refreshKeyy,
       color: Color.fromARGB(255, 98, 167, 245),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:cls_rh/screens/components/request_dialog.dart';
 import 'package:cls_rh/screens/components/request_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class RequsetScreen extends StatefulWidget {
   const RequsetScreen({Key? key}) : super(key: key);
@@ -10,6 +12,19 @@ class RequsetScreen extends StatefulWidget {
 }
 
 class _RequsetScreenState extends State<RequsetScreen> {
+  FlutterLocalNotificationsPlugin localNotification =
+      FlutterLocalNotificationsPlugin();
+  @override
+  void initState() {
+    var androidInitialize =
+        new AndroidInitializationSettings("@mipmap/ic_launcher");
+    var initialzation = new InitializationSettings(android: androidInitialize);
+    localNotification = new FlutterLocalNotificationsPlugin();
+    localNotification.initialize(initialzation);
+    print("hello there");
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
