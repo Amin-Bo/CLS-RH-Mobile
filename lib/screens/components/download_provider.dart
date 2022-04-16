@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,28 @@ class _DownloadingDialogState extends State<DownloadingDialog> {
     });
   }
 
+  FlutterLocalNotificationsPlugin localNotification =
+      FlutterLocalNotificationsPlugin();
+  Future _showNotif() async {
+    var AndroidDetails = new AndroidNotificationDetails(
+      "channel Id",
+      "Local Notification",
+      channelDescription: "Notification Channel",
+      icon: "@mipmap/ic_launcher",
+      importance: Importance.high,
+      visibility: NotificationVisibility.public,
+      groupAlertBehavior: GroupAlertBehavior.all,
+      showProgress: true,
+    );
+    var generalNotification = new NotificationDetails(android: AndroidDetails);
+    await localNotification.show(
+      0,
+      " Pdf downloaded successfully",
+      "Check your download folder Pdf name : ${widget.fileName}",
+      generalNotification,
+    );
+  }
+
   Future<String> _getFilePath(String filename) async {
     final dir = await getApplicationDocumentsDirectory();
     final Directory? extDir = await getExternalStorageDirectory();
@@ -67,7 +90,13 @@ class _DownloadingDialogState extends State<DownloadingDialog> {
   @override
   void initState() {
     super.initState();
+    var androidInitialize =
+        new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initialzation = new InitializationSettings(android: androidInitialize);
+    localNotification = new FlutterLocalNotificationsPlugin();
+    localNotification.initialize(initialzation);
     startDownloading();
+    _showNotif();
   }
 
   @override

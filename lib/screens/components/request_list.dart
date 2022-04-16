@@ -51,6 +51,7 @@ class _RequestListState extends State<RequestList> {
         .compareTo(DateTime.parse(a['sent_date']))
         .toInt());
     print(requests);
+    return requests;
     //requests = await jsonData.request;
   }
 
@@ -101,70 +102,81 @@ class _RequestListState extends State<RequestList> {
       child: Container(
         width: MediaQuery.of(context).size.width * .9,
         height: MediaQuery.of(context).size.height * 0.5,
-        child: ListView.builder(
-          itemCount: requests.length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (BuildContext context, int index) {
-            if (requests.length > 0) {
-              return ListTile(
-                leading: Icon(Icons.file_copy),
-                title: Text(requests[index]['type']),
-                subtitle: Text("Envoyé le " +
-                    DateFormat('dd-MM-yyyy')
-                        .format(DateTime.parse(requests[index]['sent_date']))),
-                trailing: IconButton(
-                  onPressed: () {
-                    switch (checkStatus(requests[index]['status'])) {
-                      case "in progress":
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          elevation: 10,
-                          behavior: SnackBarBehavior.floating,
-                          dismissDirection: DismissDirection.up,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          backgroundColor: Colors.orange,
-                          content: Text("this request is in progress "),
-                        ));
-                        break;
-                      case "done":
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PdfViewer(
-                              pdf: cls_URL +
-                                  'assets/certifications/' +
-                                  requests[index]["file"],
-                              fileName: requests[index]["_id"],
-                            ),
-                          ),
-                        );
-                        break;
-                      case "declined":
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          elevation: 10,
-                          behavior: SnackBarBehavior.floating,
-                          dismissDirection: DismissDirection.up,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          backgroundColor: Colors.red,
-                          content: Text("this request has been declined"),
-                        ));
-                        break;
-
-                      default:
-                        break;
-                    }
-                  },
-                  icon: Icon(Icons.file_download),
-                  color: colorback(requests[index]['status']),
-                ),
-              );
+        child: FutureBuilder(
+          future: getRequests(),
+          builder: (context, snapshot) {
+            if (requests == null) {
+              return Center(child: CircularProgressIndicator());
             } else {
-              return ListTile(
-                leading: Icon(Icons.file_copy),
-                title: Text('No file found'),
-                subtitle: Text(' no file found'),
-                trailing: Text('x'),
+              return ListView.builder(
+                itemCount: requests.length,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (BuildContext context, int index) {
+                  if (requests.length > 0) {
+                    return ListTile(
+                      leading: Icon(Icons.file_copy),
+                      title: Text(requests[index]['type']),
+                      subtitle: Text("Envoyé le " +
+                          DateFormat('dd-MM-yyyy').format(
+                              DateTime.parse(requests[index]['sent_date']))),
+                      trailing: IconButton(
+                        onPressed: () {
+                          switch (checkStatus(requests[index]['status'])) {
+                            case "in progress":
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                elevation: 10,
+                                behavior: SnackBarBehavior.floating,
+                                dismissDirection: DismissDirection.up,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor: Colors.orange,
+                                content: Text("this request is in progress "),
+                              ));
+                              break;
+                            case "done":
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PdfViewer(
+                                    pdf: cls_URL +
+                                        'assets/certifications/' +
+                                        requests[index]['file'],
+                                    fileName: requests[index]['_id'],
+                                  ),
+                                ),
+                              );
+                              break;
+                            case "declined":
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                elevation: 10,
+                                behavior: SnackBarBehavior.floating,
+                                dismissDirection: DismissDirection.up,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor: Colors.red,
+                                content: Text("this request has been declined"),
+                              ));
+                              break;
+
+                            default:
+                              break;
+                          }
+                        },
+                        icon: Icon(Icons.file_download),
+                        color: colorback(requests[index]['status']),
+                      ),
+                    );
+                  } else {
+                    return ListTile(
+                      leading: Icon(Icons.file_copy),
+                      title: Text('No file found'),
+                      subtitle: Text(' no file found'),
+                      trailing: Text('x'),
+                    );
+                  }
+                },
               );
             }
           },

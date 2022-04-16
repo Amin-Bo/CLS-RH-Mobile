@@ -13,6 +13,7 @@ class RequestDialog extends StatelessWidget {
   var type = "";
 
   RequestDialog({Key? key, this.type = ""}) : super(key: key);
+
   void SendRequest() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? _id = sharedPreferences.get('_id').toString();
@@ -39,6 +40,7 @@ class RequestDialog extends StatelessWidget {
     );
     print(res.statusCode);
     print(res.body);
+    RequestList();
   }
 
   @override
